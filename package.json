@@ -1,0 +1,64 @@
+{
+  "name": "eventlistener-polyfill",
+  "version": "0.0.0-development",
+  "description": "Polyfills EventListener behaviours from IE11 onward",
+  "license": "MIT",
+  "files": [
+    "src/",
+    "index.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github/eventlistener-polyfill.git"
+  },
+  "scripts": {
+    "prepare": "browserify -g uglifyify src/index.js -s polyfillEventTarget > index.js",
+    "lint": "eslint src/ test/",
+    "pretest": "npm run lint",
+    "test": "karma start",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true
+    },
+    "extends": [
+      "strict",
+      "plugin:github/recommended"
+    ],
+    "plugins": [
+      "github",
+      "filenames",
+      "import"
+    ]
+  },
+  "release": {
+    "verifyConditions": "condition-appveyor"
+  },
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "condition-appveyor": "0.0.4",
+    "eslint": "^4.2.0",
+    "eslint-config-strict": "^14.0.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-github": "^0.11.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-rule-documentation": "^1.0.13",
+    "karma": "^1.7.0",
+    "karma-browserify": "^5.1.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-detect-browsers": "^2.2.5",
+    "karma-edge-launcher": "^0.4.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-safaritechpreview-launcher": "0.0.6",
+    "karma-spec-reporter": "0.0.31",
+    "mocha": "^3.4.2",
+    "uglifyify": "^4.0.3",
+    "watchify": "^3.9.0"
+  }
+}
