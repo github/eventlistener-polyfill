@@ -1,0 +1,26 @@
+install:
+  - choco install firefox
+  - choco install googlechrome
+  - ps: Install-Product node ''
+  - npm install
+
+matrix:
+  fast_finish: true
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+build: off
+
+cache:
+  - node_modules -> package-lock.json
+  - '%APPDATA%\npm-cache'
+
+deploy_script:
+  - ps: |
+      "//registry.npmjs.org/:_authToken=`$`{NPM_TOKEN`}" | Out-File (Join-Path $ENV:APPVEYOR_BUILD_FOLDER ".npmrc") -Encoding UTF8
+      iex "npm run semantic-release"
+    on:
+      branch: master
