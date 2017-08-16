@@ -8,6 +8,8 @@
     "index.js"
   ],
   "main": "index.js",
+  "module": "src/index.js",
+  "jsnex:main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/github/eventlistener-polyfill.git"
