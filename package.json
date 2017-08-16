@@ -8,12 +8,14 @@
     "index.js"
   ],
   "main": "index.js",
+  "module": "src/index.js",
+  "jsnex:main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/github/eventlistener-polyfill.git"
   },
   "scripts": {
-    "prepare": "browserify -g uglifyify src/index.js -s polyfillEventTarget > index.js",
+    "prepare": "browserify src/index.js -s polyfillEventTarget > index.js",
     "lint": "eslint src/ test/",
     "pretest": "npm run lint",
     "test": "karma start",
@@ -58,7 +60,6 @@
     "karma-safaritechpreview-launcher": "0.0.6",
     "karma-spec-reporter": "0.0.31",
     "mocha": "^3.4.2",
-    "uglifyify": "^4.0.3",
     "watchify": "^3.9.0"
   }
 }
