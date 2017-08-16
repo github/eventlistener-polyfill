@@ -1,8 +1,8 @@
-let passiveSupported = false
-let onceSupported = false
+var passiveSupported = false
+var onceSupported = false
 function noop() {}
 try {
-  const options = Object.create({}, {
+  var options = Object.create({}, {
     passive: {get: function() { passiveSupported = true }},
     once: {get: function() { onceSupported = true }},
   })
@@ -10,20 +10,20 @@ try {
   window.removeEventListener('test', noop, options)
 } catch (e) { /* */ }
 
-const enhance = module.exports = function enhance(proto) {
-  const originalAddEventListener = proto.addEventListener
-  const originalRemoveEventListener = proto.removeEventListener
+var enhance = module.exports = function enhance(proto) {
+  var originalAddEventListener = proto.addEventListener
+  var originalRemoveEventListener = proto.removeEventListener
 
-  const listeners = new WeakMap()
+  var listeners = new WeakMap()
   proto.addEventListener = function(name, originalCallback, optionsOrCapture) {
-    let callback = originalCallback
-    const options = typeof optionsOrCapture === 'boolean' ? {capture: optionsOrCapture} : optionsOrCapture || {}
-    const passive = Boolean(options.passive)
-    const once = Boolean(options.once)
-    const capture = Boolean(options.capture)
+    var callback = originalCallback
+    var options = typeof optionsOrCapture === 'boolean' ? {capture: optionsOrCapture} : optionsOrCapture || {}
+    var passive = Boolean(options.passive)
+    var once = Boolean(options.once)
+    var capture = Boolean(options.capture)
+    var oldCallback = callback
 
     if (!onceSupported && once) {
-      const oldCallback = callback
       callback = function(event) {
         this.removeEventListener(name, originalCallback, options)
         oldCallback.call(this, event)
@@ -31,7 +31,6 @@ const enhance = module.exports = function enhance(proto) {
     }
 
     if (!passiveSupported && passive) {
-      const oldCallback = callback
       callback = function(event) {
         event.preventDefault = noop
         oldCallback.call(this, event)
@@ -39,7 +38,7 @@ const enhance = module.exports = function enhance(proto) {
     }
 
     if (!listeners.has(this)) listeners.set(this, new Map())
-    const elementMap = listeners.get(this)
+    var elementMap = listeners.get(this)
     if (!elementMap.has(originalCallback)) elementMap.set(originalCallback, new Map())
     elementMap.get(originalCallback).set('' + Number(passive) + Number(once) + Number(capture), callback)
 
@@ -47,15 +46,15 @@ const enhance = module.exports = function enhance(proto) {
   }
 
   proto.removeEventListener = function(name, originalCallback, optionsOrCapture) {
-    const capture = Boolean(typeof optionsOrCapture === 'object' ? optionsOrCapture.capture : optionsOrCapture)
+    var capture = Boolean(typeof optionsOrCapture === 'object' ? optionsOrCapture.capture : optionsOrCapture)
 
-    const elementMap = listeners.get(this)
+    var elementMap = listeners.get(this)
     if (!elementMap) return
-    const callbackMap = elementMap.get(originalCallback)
+    var callbackMap = elementMap.get(originalCallback)
     if (!callbackMap) return
 
     callbackMap.forEach(function(callback, optionsHash) {
-      const callbackCapture = optionsHash[2] === '1'
+      var callbackCapture = optionsHash[2] === '1'
       if (callbackCapture !== capture) return // when unbinding, capture is the only option that counts
       originalRemoveEventListener.call(this, name, callback, callbackCapture)
       callbackMap.delete(optionsHash)
