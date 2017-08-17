@@ -8,25 +8,23 @@ module.exports = config => {
     preprocessors: {
       'test/*.js': [ 'browserify' ],
     },
-    detectBrowsers: {
-      usePhantomJS: false,
-    },
     browserify: {
       debug: true,
       bare: true,
     },
     plugins: [
       'karma-browserify',
-      'karma-mocha',
-      'karma-spec-reporter',
       'karma-chrome-launcher',
+      'karma-detect-browsers',
       'karma-edge-launcher',
       'karma-firefox-launcher',
       'karma-ie-launcher',
+      'karma-mocha',
+      'karma-opera-launcher',
+      'karma-phantomjs-launcher',
       'karma-safari-launcher',
       'karma-safaritechpreview-launcher',
-      'karma-opera-launcher',
-      'karma-detect-browsers'
+      'karma-spec-reporter',
     ],
     reporters: [ 'spec' ],
     colors: true,
