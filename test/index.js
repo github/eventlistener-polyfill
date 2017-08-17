@@ -1,13 +1,15 @@
 /* eslint-env mocha */
-const polyfillEventTarget = require('../src')
-const assert = require('assert')
+require('core-js/es6/weak-map')
+require('core-js/es6/map')
+var polyfillEventTarget = require('../src')
+var assert = require('assert')
 
 function testSuite(eventTarget) {
   return function() {
-    let i = 0
+    var i = 0
     function increment() { i += 1 }
     function event(name) {
-      const ev = document.createEvent("CustomEvent")
+      var ev = document.createEvent("CustomEvent")
       ev.initCustomEvent(name, false, false, null)
       return ev
     }
@@ -35,7 +37,7 @@ function testSuite(eventTarget) {
       })
 
       it('unbinds even if listener throws', function() {
-        const error = new Error('listener threw an error')
+        var error = new Error('listener threw an error')
         eventTarget.addEventListener('test', function() { throw error }, {once: true})
         window.onerror = function(thrown) {
           assert.equal(thrown, error, 'an error was thrown, but not the expected one')
@@ -49,16 +51,16 @@ function testSuite(eventTarget) {
     describe('passive option', function() {
 
       it('noops preventDefault with { passive: true }', function() {
-        let ev = null
+        var ev = null
         eventTarget.addEventListener('test', function(_ev) { ev = _ev }, {passive: true})
         eventTarget.dispatchEvent(event('test'))
         assert(/noop/.test(ev.preventDefault) || /\[native code\]/.test(ev.preventDefault),
           'event.preventDefault doesnt look like native or custom implementation')
       })
 
-      it('never prevents default', () => {
+      it('never prevents default', function() {
         eventTarget.addEventListener('test', function(event) { event.preventDefault() }, {passive: true})
-        const defaultNotPrevented = eventTarget.dispatchEvent(event('test'))
+        var defaultNotPrevented = eventTarget.dispatchEvent(event('test'))
         assert(defaultNotPrevented, 'default was prevented')
       })
 
@@ -175,7 +177,7 @@ describe('XHR add/removeEventListener', testSuite(new XMLHttpRequest()))
 describe('Manual Polyfill', function() {
 
   it('add `addEventListener` and `removeEventListener` to given object', function() {
-    const target = {}
+    var target = {}
     polyfillEventTarget(target)
     assert(target.addEventListener, 'target doesnt have addEventListener')
     assert(target.addEventListener, 'target doesnt have removeEventListener')

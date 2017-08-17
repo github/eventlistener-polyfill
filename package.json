@@ -41,6 +41,7 @@
   "devDependencies": {
     "browserify": "^14.4.0",
     "condition-appveyor": "0.0.4",
+    "core-js": "^2.5.0",
     "eslint": "^4.2.0",
     "eslint-config-strict": "^14.0.0",
     "eslint-plugin-filenames": "^1.2.0",
@@ -56,6 +57,7 @@
     "karma-ie-launcher": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-opera-launcher": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.4",
     "karma-safari-launcher": "^1.0.0",
     "karma-safaritechpreview-launcher": "0.0.6",
     "karma-spec-reporter": "0.0.31",
