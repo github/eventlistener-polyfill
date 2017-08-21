@@ -37,10 +37,11 @@ var enhance = module.exports = function enhance(proto) {
       }
     }
 
-    if (!listeners.has(this)) listeners.set(this, new Map())
+    if (!listeners.has(this)) listeners.set(this, new WeakMap())
     var elementMap = listeners.get(this)
-    if (!elementMap.has(originalCallback)) elementMap.set(originalCallback, new Map())
-    elementMap.get(originalCallback).set('' + Number(passive) + Number(once) + Number(capture), callback)
+    if (!elementMap.has(originalCallback)) elementMap.set(originalCallback, [])
+    var optionsOctal = (passive * 1) + (once * 2) + (capture * 4)
+    elementMap.get(originalCallback)[optionsOctal] = callback
 
     originalAddEventListener.call(this, name, callback, capture)
   }
@@ -50,17 +51,17 @@ var enhance = module.exports = function enhance(proto) {
 
     var elementMap = listeners.get(this)
     if (!elementMap) return
-    var callbackMap = elementMap.get(originalCallback)
-    if (!callbackMap) return
+    var callbacks = elementMap.get(originalCallback)
+    if (!callbacks) return
 
-    callbackMap.forEach(function(callback, optionsHash) {
-      var callbackCapture = optionsHash[2] === '1'
-      if (callbackCapture !== capture) return // when unbinding, capture is the only option that counts
-      originalRemoveEventListener.call(this, name, callback, callbackCapture)
-      callbackMap.delete(optionsHash)
-    }, this)
+    for (var optionsOctal in callbacks) {
+      var callbackIsCapture = Boolean(optionsOctal & 4)
+      if (callbackIsCapture !== capture) continue // when unbinding, capture is the only option that counts
+      originalRemoveEventListener.call(this, name, callbacks[optionsOctal], callbackIsCapture)
+      delete callbacks[optionsOctal]
+    }
 
-    if (callbackMap.size === 0) {
+    if (callbacks.length === 0) {
       elementMap.delete(originalCallback)
     }
 

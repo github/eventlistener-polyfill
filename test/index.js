@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 require('core-js/es6/weak-map')
-require('core-js/es6/map')
 var polyfillEventTarget = require('../src')
 var assert = require('assert')
 
