@@ -31,6 +31,14 @@ function testSuite(eventTarget) {
         eventTarget.dispatchEvent(event('test2'))
         assert.equal(i, 2, 'test1 event listener was not unbound properly and fired ' + i + ' times')
       })
+
+      it('can bind and unbind simple event listeners', function() {
+        eventTarget.addEventListener('test', increment)
+        eventTarget.dispatchEvent(event('test'))
+        eventTarget.removeEventListener('test', increment)
+        eventTarget.dispatchEvent(event('test'))
+        assert.equal(i, 1, 'test event listener was not unbound properly and fired ' + i + ' times')
+      })
     })
 
     describe('once option', function() {

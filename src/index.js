@@ -16,6 +16,10 @@ var enhance = module.exports = function enhance(proto) {
 
   var listeners = new WeakMap()
   proto.addEventListener = function(name, originalCallback, optionsOrCapture) {
+    if (optionsOrCapture === undefined || optionsOrCapture === true || optionsOrCapture === false) {
+      return originalAddEventListener.call(this, name, originalCallback, optionsOrCapture)
+    }
+
     var callback = originalCallback
     var options = typeof optionsOrCapture === 'boolean' ? {capture: optionsOrCapture} : optionsOrCapture || {}
     var passive = Boolean(options.passive)
@@ -50,9 +54,9 @@ var enhance = module.exports = function enhance(proto) {
     var capture = Boolean(typeof optionsOrCapture === 'object' ? optionsOrCapture.capture : optionsOrCapture)
 
     var elementMap = listeners.get(this)
-    if (!elementMap) return
+    if (!elementMap) return originalRemoveEventListener.call(this, name, originalCallback, optionsOrCapture)
     var callbacks = elementMap.get(originalCallback)
-    if (!callbacks) return
+    if (!callbacks) return originalRemoveEventListener.call(this, name, originalCallback, optionsOrCapture)
 
     for (var optionsOctal in callbacks) {
       var callbackIsCapture = Boolean(optionsOctal & 4)
