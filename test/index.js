@@ -19,6 +19,28 @@ function testSuite(eventTarget) {
       eventTarget.removeEventListener('test', increment, true)
     })
 
+    describe('expected behaviours', function() {
+      it('can bind and unbind the same event functions to different event names', function() {
+        eventTarget.addEventListener('test1', increment)
+        eventTarget.addEventListener('test2', increment)
+        eventTarget.dispatchEvent(event('test1'))
+        eventTarget.dispatchEvent(event('test2'))
+        eventTarget.removeEventListener('test1', increment)
+        eventTarget.removeEventListener('test2', increment)
+        eventTarget.dispatchEvent(event('test1'))
+        eventTarget.dispatchEvent(event('test2'))
+        assert.equal(i, 2, 'test1 event listener was not unbound properly and fired ' + i + ' times')
+      })
+
+      it('can bind and unbind simple event listeners', function() {
+        eventTarget.addEventListener('test', increment)
+        eventTarget.dispatchEvent(event('test'))
+        eventTarget.removeEventListener('test', increment)
+        eventTarget.dispatchEvent(event('test'))
+        assert.equal(i, 1, 'test event listener was not unbound properly and fired ' + i + ' times')
+      })
+    })
+
     describe('once option', function() {
 
       it('only fires { once: true } event listeners once', function() {
