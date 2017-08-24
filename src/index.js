@@ -58,11 +58,6 @@ var enhance = module.exports = function enhance(proto) {
       var callbackIsCapture = Boolean(optionsOctal & 4)
       if (callbackIsCapture !== capture) continue // when unbinding, capture is the only option that counts
       originalRemoveEventListener.call(this, name, callbacks[optionsOctal], callbackIsCapture)
-      delete callbacks[optionsOctal]
-    }
-
-    if (callbacks.length === 0) {
-      elementMap.delete(originalCallback)
     }
 
   }
