@@ -16,7 +16,12 @@ var enhance = module.exports = function enhance(proto) {
 
   var listeners = new WeakMap()
   proto.addEventListener = function(name, originalCallback, optionsOrCapture) {
-    if (optionsOrCapture === undefined || optionsOrCapture === true || optionsOrCapture === false) {
+    if (
+      optionsOrCapture === undefined ||
+      optionsOrCapture === true ||
+      optionsOrCapture === false ||
+      (!originalCallback || typeof originalCallback !== 'function' && typeof originalCallback !== 'object')
+    ) {
       return originalAddEventListener.call(this, name, originalCallback, optionsOrCapture)
     }
 

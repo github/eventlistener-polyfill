@@ -19,6 +19,21 @@ function testSuite(eventTarget) {
       eventTarget.removeEventListener('test', increment, true)
     })
 
+    describe('unexpected behaviours', function() {
+
+      it('deffers to browser behavior for invalid arguments', function() {
+        try {
+          // either browsers will silently ignore this call, or they'll throw an error specifically about `addEventListener`
+          // if neither of those happen, an error happened in our code.
+          eventTarget.addEventListener('test1', 'this is invalid, but someone is doing this in the wild!', {})
+        } catch (e) {
+          // ok... I lied... Safari throws "Type error" not anything about addEventListener
+          assert.ok(/(addEventListener|Type error)/.test(e.message), 'error was thrown internally to our code')
+        }
+      })
+
+    })
+
     describe('expected behaviours', function() {
       it('can bind and unbind the same event functions to different event names', function() {
         eventTarget.addEventListener('test1', increment)
