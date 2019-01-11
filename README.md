@@ -43,7 +43,7 @@ polyfillEventTarget(MyCustomEventTarget)
 
 ##### Detecting Support
 
-We detect support for `once` and `passive` by making an object with getters for those options. If the browser were to retreive those values, the getters would trigger and we would know the browser would (in some way) suport them. This is working successfully for now - our tests pass in the browsers weve tested, even those where the polyfill is disabled.
+We detect support for `once` and `passive` by making an object with getters for those options. If the browser were to retrieve those values, the getters would trigger and we would know the browser would (in some way) suport them. This is working successfully for now - our tests pass in the browsers weve tested, even those where the polyfill is disabled.
 
 ##### The once implementation
 
