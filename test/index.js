@@ -3,10 +3,20 @@ require('core-js/es6/weak-map')
 var polyfillEventTarget = require('../src')
 var assert = require('assert')
 
-function testSuite(eventTarget) {
+function testSuite(eventTarget, listenerType) {
   return function() {
     var i = 0
-    function increment() { i += 1 }
+    var listeners = {
+      'Function': function() { i++ },
+      'EventListener': { handleEvent: function() { i++ } },
+      'Ambiguous': (function() {
+        function listener() { i++ }
+        listener.handleEvent = function() {}
+        return listener
+      })()
+    }
+    var increment = listeners[listenerType]
+
     function event(name) {
       var ev = document.createEvent("CustomEvent")
       ev.initCustomEvent(name, false, false, null)
@@ -200,15 +210,21 @@ function testSuite(eventTarget) {
   }
 }
 
-describe('Window add/removeEventListener', testSuite(window))
+['Function', 'EventListener', 'Ambiguous'].forEach(function(listenerType) {
+  describe(listenerType + ' listener', function() {
 
-describe('Document add/removeEventListener', testSuite(document))
+    describe('Window add/removeEventListener', testSuite(window, listenerType))
 
-describe('Div add/removeEventListener', testSuite(document.createElement('div')))
+    describe('Document add/removeEventListener', testSuite(document, listenerType))
 
-describe('TextNode add/removeEventListener', testSuite(document.createTextNode('testing')))
+    describe('Div add/removeEventListener', testSuite(document.createElement('div'), listenerType))
 
-describe('XHR add/removeEventListener', testSuite(new XMLHttpRequest()))
+    describe('TextNode add/removeEventListener', testSuite(document.createTextNode('testing'), listenerType))
+
+    describe('XHR add/removeEventListener', testSuite(new XMLHttpRequest(), listenerType))
+  })
+})
+
 
 describe('Manual Polyfill', function() {
 
