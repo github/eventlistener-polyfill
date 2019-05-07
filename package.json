@@ -1,6 +1,6 @@
 {
   "name": "eventlistener-polyfill",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Polyfills EventListener behaviours from IE11 onward",
   "license": "MIT",
   "files": [
