@@ -1,6 +1,6 @@
 {
   "name": "eventlistener-polyfill",
-  "version": "0.0.0-development",
+  "version": "1.0.4",
   "description": "Polyfills EventListener behaviours from IE11 onward",
   "license": "MIT",
   "files": [
@@ -18,8 +18,7 @@
     "prepare": "browserify src/index.js -s polyfillEventTarget > index.js",
     "lint": "eslint src/ test/",
     "pretest": "npm run lint",
-    "test": "karma start",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "test": "karma start"
   },
   "eslintConfig": {
     "env": {
@@ -35,12 +34,8 @@
       "import"
     ]
   },
-  "release": {
-    "verifyConditions": "condition-appveyor"
-  },
   "devDependencies": {
     "browserify": "^14.4.0",
-    "condition-appveyor": "0.0.4",
     "core-js": "^2.5.0",
     "eslint": "^4.2.0",
     "eslint-config-strict": "^14.0.0",
