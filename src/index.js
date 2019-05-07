@@ -25,7 +25,7 @@ var enhance = module.exports = function enhance(proto) {
       return originalAddEventListener.call(this, name, originalCallback, optionsOrCapture)
     }
 
-    var callback = originalCallback
+    var callback = typeof originalCallback !== 'function' && typeof originalCallback.handleEvent === 'function' ? originalCallback.handleEvent.bind(originalCallback) : originalCallback
     var options = typeof optionsOrCapture === 'boolean' ? {capture: optionsOrCapture} : optionsOrCapture || {}
     var passive = Boolean(options.passive)
     var once = Boolean(options.once)
